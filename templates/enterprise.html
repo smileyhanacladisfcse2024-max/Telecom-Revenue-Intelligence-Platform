@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Enterprise Customers</title>
+<style>
+body{background:#0f172a;color:white;font-family:Arial;padding:30px;}
+table{width:100%;border-collapse:collapse;}
+th{background:#0284c7;padding:12px;}
+td{padding:10px;border-bottom:1px solid #333;}
+button{padding:10px 20px;background:#0284c7;color:white;border:none;border-radius:8px;}
+</style>
+</head>
+<body>
+
+<h1>🏢 Enterprise Customers</h1>
+
+<a href="/">
+<button>← Back to Dashboard</button>
+</a>
+
+<br><br>
+
+<table>
+
+<tr>
+<th>Customer ID</th>
+<th>Predicted Bill</th>
+<th>Offer</th>
+</tr>
+
+{% for customer in customers %}
+
+<tr>
+<td>{{ customer.customerID }}</td>
+<td>{{ customer.predicted_next_bill }}</td>
+<td>{{ customer.recommended_offer }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>
