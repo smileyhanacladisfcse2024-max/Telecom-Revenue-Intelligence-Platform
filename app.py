@@ -7,8 +7,10 @@ import matplotlib.pyplot as plt
 app = Flask(__name__)
 # Gmail Configuration
 
-SENDER_EMAIL = "smileyhanaf@gmail.com"
-APP_PASSWORD = "ctox mqqq unfv rslh"
+import os
+
+SENDER_EMAIL = os.getenv("SENDER_EMAIL")
+APP_PASSWORD = os.getenv("APP_PASSWORD")
 # ==========================
 # DASHBOARD PAGE
 # ==========================
@@ -71,12 +73,11 @@ def send_email(receiver_email, subject, body):
 
         return True
 
-    except Exception as e:
+   except Exception as e:
 
-        print(e)
+    print("EMAIL ERROR:", str(e))
 
-        return False
-
+    return False
 
 # ==========================
 # CUSTOMER DETAILS PAGE
