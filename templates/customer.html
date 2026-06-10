@@ -7,13 +7,6 @@
 
 <style>
 
-<!DOCTYPE html>
-
-<html>
-
-<head>
-
-```
 <title>Customer Insights</title>
 
 <style>
@@ -39,11 +32,12 @@
     }
 
     input{
-        width:600px;
-        padding:12px;
-        border-radius:8px;
-        border:none;
-    }
+    width:90%;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
 
     button{
         background:#0284c7;
@@ -106,7 +100,7 @@
 
 <div class="container">
 
-```
+
 <h1>Customer Insights Portal</h1>
 
 <div style="text-align:center; margin-bottom:20px;">
@@ -126,7 +120,7 @@
         <input
             type="text"
             name="customer_ids"
-            placeholder="Example: 9305-CDSKC,7925-PNRGI,7590-VHVEG"
+            placeholder="Enter Customer IDs (msisdn) separated by commas"
             required>
 
         <button type="submit">
@@ -144,38 +138,37 @@
     <table>
 
         <tr>
-            <th>Customer ID</th>
-            <th>Predicted Bill</th>
-            <th>Bill Drop</th>
-            <th>Risk Level</th>
-            <th>Offer</th>
-            <th>Email Sent</th>
+           <th>Customer ID</th>
+           <th>Average Revenue</th>
+           <th>Total Revenue</th>
+           <th>Risk Level</th>
+           <th>Offer</th>
+           <th>Customer Segment</th>
         </tr>
 
         {% for customer in customers %}
 
         <tr>
 
-            <td>{{ customer.customerID }}</td>
+            <td>{{ customer.msisdn }}</td>
 
-            <td>{{ customer.predicted_next_bill }}</td>
+            <td>{{ customer.avg_revenue }}</td>
 
-            <td>{{ customer.bill_drop }}</td>
+            <td>{{ customer.total_revenue }}</td>
 
-            {% if customer.bill_drop_label == "High Drop" %}
+            {% if customer.risk_level == "High Risk" %}
             <td style="color:red;font-weight:bold;">
-                🔴 High Drop
+                🔴 High Risk
             </td>
             {% else %}
             <td style="color:lightgreen;font-weight:bold;">
                 🟢 Normal
-             </td>
+            </td>
             {% endif %}
 
             <td>{{ customer.recommended_offer }}</td>
 
-            <td>{{ customer.email_sent }}</td>
-
+            <td>{{ customer.customer_segment }}</td>
         </tr>
 
         {% endfor %}
@@ -183,12 +176,12 @@
     </table>
 
     <h2 style="margin-top:30px;">
-        📊 Customer Comparison Chart
+        📊 Customer Revenue Comparison
     </h2>
 
     <img
         src="{{ url_for('static', filename='customer_comparison.png') }}"
-        alt="Customer Comparison Chart">
+        alt="Customer Revenue Comparison">
 
     {% endif %}
 
@@ -203,7 +196,7 @@
     {% endif %}
 
 </div>
-```
+
 
 </div>
 

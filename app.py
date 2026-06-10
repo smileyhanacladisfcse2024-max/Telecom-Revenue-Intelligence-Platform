@@ -10,27 +10,34 @@ app = Flask(__name__)
 @app.route("/")
 def dashboard():
 
-    df = pd.read_csv("outputs/final_customer_scorecard.csv")
+    df = pd.read_csv(
+        "outputs/final_customer_scorecard.csv"
+    )
 
     total_customers = len(df)
 
-    high_drop = len(df[df["bill_drop_label"] == "High Drop"])
+    high_risk = len(
+        df[df["risk_level"] == "High Risk"]
+    )
 
-    enterprise = len(df[df["enterprise_customer"] == True])
+    enterprise = len(
+        df[df["enterprise_customer"] == True]
+    )
 
-    emails_sent = len(df[df["email_sent"] == True])
+    offers_sent = len(
+        df[df["recommended_offer"] != "No Offer Needed"]
+    )
 
-    top_risk = df.sort_values(
-        by="bill_drop",
-        ascending=False
-    ).head(10)
+    top_risk = df[
+        df["risk_level"] == "High Risk"
+    ].head(10)
 
     return render_template(
         "dashboard.html",
         total_customers=total_customers,
-        high_drop=high_drop,
+        high_risk=high_risk,
         enterprise=enterprise,
-        emails_sent=emails_sent,
+        offers_sent=offers_sent,
         top_risk=top_risk.to_dict("records")
     )
 
@@ -53,32 +60,68 @@ def customer():
             for x in customer_ids.split(",")
         ]
 
-        df = pd.read_csv("outputs/final_customer_scorecard.csv")
+        df = pd.read_csv(
+            "outputs/final_customer_scorecard.csv"
+        )
 
-        result = df[df["customerID"].isin(id_list)]
+        # Search multiple customer IDs
+        matched_rows = []
+
+        for cid in id_list:
+
+            temp = df[
+                df["msisdn"].str.contains(
+                    cid,
+                    case=False,
+                    na=False
+                )
+            ]
+
+            matched_rows.append(temp)
+
+        if len(matched_rows) > 0:
+
+            result = pd.concat(
+                matched_rows,
+                ignore_index=True
+            ).drop_duplicates()
+
+        else:
+
+            result = pd.DataFrame()
 
         if len(result) > 0:
 
             customers = result.to_dict("records")
 
             # ==========================
-            # COMPARISON CHART
+            # REVENUE COMPARISON CHART
             # ==========================
-            customer_names = result["customerID"]
-            predicted_bills = result["predicted_next_bill"]
+            customer_names = result["msisdn"]
+            revenues = result["total_revenue"]
 
-            plt.figure(figsize=(8, 4))
+            plt.figure(figsize=(10, 5))
 
-            plt.bar(customer_names, predicted_bills)
+            plt.bar(
+                customer_names,
+                revenues
+            )
 
-            plt.title("Predicted Bill Comparison")
+            plt.title(
+                "Customer Revenue Comparison"
+            )
+
             plt.xlabel("Customer ID")
-            plt.ylabel("Predicted Bill")
-            plt.xticks(rotation=45)
+            plt.ylabel("Total Revenue")
+
+            plt.xticks(rotation=90)
 
             plt.tight_layout()
 
-            plt.savefig("static/customer_comparison.png")
+            plt.savefig(
+                "static/customer_comparison.png"
+            )
+
             plt.close()
 
             # ==========================
@@ -86,34 +129,21 @@ def customer():
             # ==========================
             if len(result) == 1:
 
-                customer = result.iloc[0]
+                customer_row = result.iloc[0]
 
-                email_preview = f"""
-Dear Customer,
-
-We value your relationship with us.
-
-Our system predicts a change in your upcoming bill.
-
-Recommended Offer:
-{customer['recommended_offer']}
-
-Predicted Next Bill:
-{customer['predicted_next_bill']}
-
-Bill Drop:
-{customer['bill_drop']}
-
-Thank you for choosing our telecom services.
-
-Telecom Customer Success Team
-"""
+                email_preview = customer_row[
+                    "email_text"
+                ]
 
     return render_template(
         "customer.html",
         customers=customers,
         email_preview=email_preview
     )
+
+# ==========================
+# ENTERPRISE PAGE
+# ==========================
 @app.route("/enterprise")
 def enterprise():
 
@@ -127,10 +157,15 @@ def enterprise():
 
     return render_template(
         "enterprise.html",
-        customers=enterprise_df.to_dict("records")
+        customers=enterprise_df.to_dict(
+            "records"
+        )
     )
 
 
+# ==========================
+# OUTREACH PAGE
+# ==========================
 @app.route("/outreach")
 def outreach():
 
@@ -139,15 +174,20 @@ def outreach():
     )
 
     outreach_df = df[
-        df["customer_segment"] == "Outreach Customer"
+        df["customer_segment"]
+        == "Outreach Customer"
     ]
 
     return render_template(
         "outreach.html",
-        customers=outreach_df.to_dict("records")
+        customers=outreach_df.to_dict(
+            "records"
+        )
     )
 
 
-
+# ==========================
+# RUN APP
+# ==========================
 if __name__ == "__main__":
     app.run(debug=True)

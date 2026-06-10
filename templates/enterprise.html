@@ -22,22 +22,24 @@ button{padding:10px 20px;background:#0284c7;color:white;border:none;border-radiu
 
 <table>
 
+
 <tr>
-<th>Customer ID</th>
-<th>Predicted Bill</th>
-<th>Offer</th>
+    <th>Customer ID</th>
+    <th>Total Revenue</th>
+    <th>Risk Level</th>
+    <th>Offer</th>
 </tr>
 
 {% for customer in customers %}
 
 <tr>
-<td>{{ customer.customerID }}</td>
-<td>{{ customer.predicted_next_bill }}</td>
-<td>{{ customer.recommended_offer }}</td>
+    <td>{{ customer.msisdn[:12] }}</td>
+    <td>{{ "%.2f"|format(customer.total_revenue) }}</td>
+    <td>{{ customer.risk_level }}</td>
+    <td>{{ customer.recommended_offer }}</td>
 </tr>
 
 {% endfor %}
-
 </table>
 
 </body>
