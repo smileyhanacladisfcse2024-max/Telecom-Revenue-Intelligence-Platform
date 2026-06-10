@@ -261,14 +261,74 @@
 
     <div class="section">
 
-        <h2>📊 Revenue Risk Analysis</h2>
+    <h2>📊 Revenue Risk Analysis</h2>
 
-        <p>
-        High Risk customers are identified using revenue-drop analysis
-        on the large-scale telecom dataset processed through chunking.
-        </p>
+    <div class="cards">
+
+        <div class="card">
+            <h3>Total Customers</h3>
+            <div class="number">
+                {{ total_customers }}
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>High Risk</h3>
+            <div class="number">
+                {{ high_risk }}
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Enterprise</h3>
+            <div class="number">
+                {{ enterprise }}
+            </div>
+        </div>
+
     </div>
 
+    <p style="margin-top:20px;font-size:18px;">
+        Revenue risk is calculated using chunk-processed telecom revenue data.
+        High-risk customers are targeted with personalized retention offers
+        and automated email campaigns.
+    </p>
+
+   </div>
+ <div class="section">
+
+    <h2>📁 Dataset Statistics</h2>
+
+    <table>
+
+        <tr>
+            <th>Dataset</th>
+            <th>Records</th>
+        </tr>
+
+        <tr>
+            <td>CRM Dataset</td>
+            <td>13,627,493</td>
+        </tr>
+
+        <tr>
+            <td>Device Dataset</td>
+            <td>2,440,100</td>
+        </tr>
+
+        <tr>
+            <td>Revenue Dataset</td>
+            <td>1,704,601</td>
+        </tr>
+
+        <tr>
+            <td>Final Customers</td>
+            <td>143,731</td>
+        </tr>
+
+    </table>
+
+</div>
 </div>
 
 </body>

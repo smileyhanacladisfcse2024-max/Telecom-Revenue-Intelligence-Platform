@@ -185,15 +185,40 @@
 
     {% endif %}
 
-    {% if email_preview %}
+   {% if email_preview %}
 
-    <h2 style="margin-top:30px;">
-        📧 Email Preview
+<h2 style="margin-top:30px;">
+    📧 Email Preview
+</h2>
+
+<textarea rows="12" readonly>{{ email_preview }}</textarea>
+
+<form method="POST" action="/send_customer_email">
+
+    <h2 style="margin-top:20px;">
+        Send Email
     </h2>
 
-    <textarea rows="12" readonly>{{ email_preview }}</textarea>
+    <input
+        type="email"
+        name="receiver_email"
+        placeholder="Enter recipient Gmail address"
+        required>
 
-    {% endif %}
+    <input
+        type="hidden"
+        name="email_body"
+        value="{{ email_preview }}">
+
+    <br><br>
+
+    <button type="submit">
+        📧 Send Email
+    </button>
+
+</form>
+
+{% endif %}
 
 </div>
 

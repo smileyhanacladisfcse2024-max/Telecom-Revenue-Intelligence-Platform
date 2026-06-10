@@ -1,9 +1,14 @@
+import smtplib
+from email.message import EmailMessage
 from flask import Flask, render_template, request
 import pandas as pd
 import matplotlib.pyplot as plt
 
 app = Flask(__name__)
+# Gmail Configuration
 
+SENDER_EMAIL = "smileyhanaf@gmail.com"
+APP_PASSWORD = "ctox mqqq unfv rslh"
 # ==========================
 # DASHBOARD PAGE
 # ==========================
@@ -40,6 +45,37 @@ def dashboard():
         offers_sent=offers_sent,
         top_risk=top_risk.to_dict("records")
     )
+def send_email(receiver_email, subject, body):
+
+    try:
+
+        msg = EmailMessage()
+
+        msg["Subject"] = subject
+        msg["From"] = SENDER_EMAIL
+        msg["To"] = receiver_email
+
+        msg.set_content(body)
+
+        with smtplib.SMTP_SSL(
+            "smtp.gmail.com",
+            465
+        ) as smtp:
+
+            smtp.login(
+                SENDER_EMAIL,
+                APP_PASSWORD
+            )
+
+            smtp.send_message(msg)
+
+        return True
+
+    except Exception as e:
+
+        print(e)
+
+        return False
 
 
 # ==========================
@@ -140,7 +176,60 @@ def customer():
         customers=customers,
         email_preview=email_preview
     )
+# ==========================
+# SEND EMAIL PAGE
+# ==========================
+@app.route("/send_email", methods=["GET", "POST"])
+def email_page():
 
+    message = ""
+
+    if request.method == "POST":
+
+        receiver = request.form["receiver"]
+
+        subject = "Telecom Customer Retention Offer"
+
+        body = request.form["email_body"]
+
+        success = send_email(
+            receiver,
+            subject,
+            body
+        )
+
+        if success:
+            message = "✅ Email Sent Successfully"
+        else:
+            message = "❌ Email Sending Failed"
+
+    return render_template(
+        "send_email.html",
+        message=message
+    )
+@app.route("/send_customer_email", methods=["POST"])
+def send_customer_email():
+
+    receiver = request.form["receiver_email"]
+
+    email_body = request.form["email_body"]
+
+    success = send_email(
+        receiver,
+        "Telecom Customer Retention Offer",
+        email_body
+    )
+
+    if success:
+        return """
+        <h2>Email Sent Successfully ✅</h2>
+        <a href='/customer'>Go Back</a>
+        """
+
+    return """
+    <h2>Email Sending Failed ❌</h2>
+    <a href='/customer'>Go Back</a>
+    """
 # ==========================
 # ENTERPRISE PAGE
 # ==========================

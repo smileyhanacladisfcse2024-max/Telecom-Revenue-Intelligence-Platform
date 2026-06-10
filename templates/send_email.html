@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Send Email</title>
+
+<style>
+
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Arial;
+    padding:30px;
+}
+
+.container{
+    max-width:800px;
+    margin:auto;
+}
+
+input, textarea{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    margin-bottom:20px;
+    border-radius:8px;
+}
+
+button{
+    background:#0284c7;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+h1{
+    color:#38bdf8;
+}
+
+.success{
+    color:lightgreen;
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📧 Send Customer Email</h1>
+
+<a href="/">
+<button>← Dashboard</button>
+</a>
+
+<br><br>
+
+<form method="POST">
+
+<label>Recipient Email</label>
+
+<input
+type="email"
+name="receiver"
+required>
+
+<label>Email Content</label>
+
+<textarea
+name="email_body"
+rows="12"
+required></textarea>
+
+<button type="submit">
+Send Email
+</button>
+
+</form>
+
+<p class="success">
+{{ message }}
+</p>
+
+</div>
+
+</body>
+</html>
