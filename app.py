@@ -59,10 +59,13 @@ def send_email(receiver_email, subject, body):
 
         msg.set_content(body)
 
-        with smtplib.SMTP_SSL(
+        with smtplib.SMTP(
             "smtp.gmail.com",
-            465
+            587,
+            timeout=20
         ) as smtp:
+
+            smtp.starttls()
 
             smtp.login(
                 SENDER_EMAIL,
@@ -73,12 +76,11 @@ def send_email(receiver_email, subject, body):
 
         return True
 
-   except Exception as e:
+    except Exception as e:
 
-    print("EMAIL ERROR:", str(e))
+        print("EMAIL ERROR:", str(e))
 
-    return False
-
+        return False
 # ==========================
 # CUSTOMER DETAILS PAGE
 # ==========================
