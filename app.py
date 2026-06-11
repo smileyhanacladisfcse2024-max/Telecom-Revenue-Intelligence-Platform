@@ -9,8 +9,8 @@ app = Flask(__name__)
 
 import os
 
-SENDER_EMAIL = os.getenv("SENDER_EMAIL")
-APP_PASSWORD = os.getenv("APP_PASSWORD")
+BREVO_LOGIN = os.getenv("BREVO_LOGIN")
+BREVO_SMTP_KEY = os.getenv("BREVO_SMTP_KEY")
 # ==========================
 # DASHBOARD PAGE
 # ==========================
@@ -54,13 +54,13 @@ def send_email(receiver_email, subject, body):
         msg = EmailMessage()
 
         msg["Subject"] = subject
-        msg["From"] = SENDER_EMAIL
+        msg["From"] = "smileyhanaf@gmail.com"
         msg["To"] = receiver_email
 
         msg.set_content(body)
 
         with smtplib.SMTP(
-            "smtp.gmail.com",
+            "smtp-relay.brevo.com",
             587,
             timeout=20
         ) as smtp:
@@ -68,8 +68,8 @@ def send_email(receiver_email, subject, body):
             smtp.starttls()
 
             smtp.login(
-                SENDER_EMAIL,
-                APP_PASSWORD
+                BREVO_LOGIN,
+                BREVO_SMTP_KEY
             )
 
             smtp.send_message(msg)
