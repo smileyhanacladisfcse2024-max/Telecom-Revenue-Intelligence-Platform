@@ -63,19 +63,20 @@ def send_email(receiver_email, subject, body):
         print("BREVO KEY EXISTS =", BREVO_SMTP_KEY is not None)
 
         with smtplib.SMTP(
-           "smtp-relay.brevo.com",
+            "smtp-relay.brevo.com",
             587,
             timeout=30
         ) as smtp:
 
-        smtp.starttls()
+            smtp.starttls()
 
-        smtp.login(
-             BREVO_LOGIN,
-             BREVO_SMTP_KEY
-    )
+            smtp.login(
+                BREVO_LOGIN,
+                BREVO_SMTP_KEY
+            )
 
-        smtp.send_message(msg)
+            smtp.send_message(msg)
+
         return True
 
     except Exception as e:
