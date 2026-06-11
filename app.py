@@ -78,12 +78,12 @@ def send_email(receiver_email, subject, body):
 
     except Exception as e:
 
-    import traceback
+        import traceback
 
-    print("EMAIL ERROR:")
-    traceback.print_exc()
+        print("EMAIL ERROR:")
+        traceback.print_exc()
 
-    return False
+        return False
 # ==========================
 # CUSTOMER DETAILS PAGE
 # ==========================
